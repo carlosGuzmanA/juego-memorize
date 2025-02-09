@@ -1,0 +1,12 @@
+# Ignorar un archivo específico
+config.json
+
+# Ignorar una carpeta y su contenido
+node_modules/
+.vscode/
+
+# Ignorar todos los archivos con extensión .log
+*.log
+
+# Ignorar archivos del sistema de macOS
+.DS_Store

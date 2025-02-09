@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorize Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+            padding: 10px;
+        }
+        .game-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            max-width: 90%;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        .card {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #6200ea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .flipped img {
+            display: block;
+        }
+        @media (max-width: 500px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageUpload" multiple accept="image/*">
+    <div class="game-container">
+        <h1>Memorize Game</h1>
+        <div class="stats">
+            <span>Movimientos: <span id="moves">0</span></span>
+            <span>Tiempo: <span id="timer">0:00</span></span>
+        </div>
+        <div class="grid" id="gameGrid"></div>
+        <button id="restart">Reiniciar</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameGrid = document.getElementById('gameGrid');
+            const movesCounter = document.getElementById('moves');
+            const timerDisplay = document.getElementById('timer');
+            const restartButton = document.getElementById('restart');
+            const imageUpload = document.getElementById('imageUpload');
+            
+            let moves = 0;
+            let timer = 0;
+            let timerInterval;
+            let firstCard, secondCard;
+            let lockBoard = false;
+            let images = [];
+            
+            imageUpload.addEventListener('change', (event) => {
+                const files = Array.from(event.target.files);
+                if (files.length < 8) {
+                    alert('Debes subir al menos 8 imágenes.');
+                    return;
+                }
+                images = files.slice(0, 8).map(file => URL.createObjectURL(file));
+                initializeGame();
+            });
+            
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    timer++;
+                    timerDisplay.textContent = `${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, '0')}`;
+                }, 1000);
+            }
+            
+            function flipCard() {
+                if (lockBoard || this === firstCard) return;
+                this.classList.add('flipped');
+                
+                if (!firstCard) {
+                    firstCard = this;
+                    return;
+                }
+                
+                secondCard = this;
+                lockBoard = true;
+                checkMatch();
+            }
+            
+            function checkMatch() {
+                moves++;
+                movesCounter.textContent = moves;
+                
+                if (firstCard.dataset.image === secondCard.dataset.image) {
+                    resetBoard();
+                } else {
+                    setTimeout(() => {
+                        firstCard.classList.remove('flipped');
+                        secondCard.classList.remove('flipped');
+                        resetBoard();
+                    }, 1000);
+                }
+            }
+            
+            function resetBoard() {
+                [firstCard, secondCard, lockBoard] = [null, null, false];
+                if (document.querySelectorAll('.flipped').length === images.length * 2) {
+                    clearInterval(timerInterval);
+                    setTimeout(() => alert('¡Felicidades! Has ganado.'), 500);
+                }
+            }
+            
+            function createBoard() {
+                gameGrid.innerHTML = '';
+                let cards = [...images, ...images].sort(() => Math.random() - 0.5);
+                
+                cards.forEach(image => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.dataset.image = image;
+                    
+                    const img = document.createElement('img');
+                    img.src = image;
+                    card.appendChild(img);
+                    
+                    card.addEventListener('click', flipCard);
+                    gameGrid.appendChild(card);
+                });
+            }
+            
+            restartButton.addEventListener('click', () => {
+                clearInterval(timerInterval);
+                timer = 0;
+                moves = 0;
+                movesCounter.textContent = moves;
+                timerDisplay.textContent = '0:00';
+                initializeGame();
+            });
+            
+            function initializeGame() {
+                if (images.length < 8) return;
+                createBoard();
+                startTimer();
+            }
+        });
+    </script>
+</body>
+</html>

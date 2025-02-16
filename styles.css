@@ -1,87 +1,190 @@
-/* styles.css */
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
     margin: 0;
+    padding: 20px;
+}
+
+.phase-selector {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.phase-btn {
+    padding: 8px 20px;
+    background-color: #e0e0e0;
+    color: #333;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.phase-btn.active {
+    background-color: #6200ea;
+    color: white;
 }
 
 .game-container {
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    max-width: 90%;
+    width: 600px;
 }
 
-h1 {
-    color: #37474f;
+.image-selector {
+    display: grid;
+    background: #2196F3;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.image-option {
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-option.selected {
+    border-color: #6200ea;
+    box-shadow: 0 4px 15px rgba(98, 0, 234, 0.3);
+}
+
+.image-option img {
+    height: 100px;
+    object-fit: cover;
+}
+
+.selection-counter {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(4, 100px);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    margin-top: 20px;
+    margin: 20px auto;
 }
 
 .card {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #6200ea;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 8px;
     position: relative;
-    width: 100px;
-    height: 100px;
-    perspective: 1000px;
-}
-
-.card-inner {
-    position: absolute;
-    width: 100%;
-    height: 100%;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
+    transition: transform 0.6s;
 }
 
-.card-front, .card-back {
+.card img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
     position: absolute;
+    top: 50%;
+    left: 50%;
+    backface-visibility: hidden;
+    transform: translate(-50%, -50%) rotateY(180deg);
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+    pointer-events: none;
+}
+
+.card.matched {
+    filter: grayscale(1);
+    cursor: default;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem 0;
+    font-size: 1.1em;
+}
+
+#winModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
-}
-
-.card-front {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
+    background: rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
-    font-size: 2em;
 }
 
-.card-back {
-    background-color: #37474f;
-    color: #fff;
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.game-buttons {
     display: flex;
+    gap: 10px;
     justify-content: center;
-    align-items: center;
-    transform: rotateY(180deg);
-}
-
-.card.flipped .card-inner {
-    transform: rotateY(180deg);
-}
-
-.moves, .time {
-    margin-top: 20px;
-    color: #37474f;
+    margin-top: 15px;
 }
 
 button {
-    margin-top: 20px;
     padding: 10px 20px;
-    background-color: #607d8b;
-    color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#restart {
+    background-color: #2196F3;
+    color: white;
+}
+
+#returnToSelection {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#closeModal {
+    background-color: #f44336;
+    color: white;
+    margin-top: 15px;
 }
 
 button:hover {
-    background-color: #455a64;
+    opacity: 0.9;
+}
+
+@media (max-width: 500px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .game-container {
+        width: 90%;
+    }
 }

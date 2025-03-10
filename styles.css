@@ -124,7 +124,6 @@ body {
     position: absolute; /* Cambiado de sticky a absolute para mantenerlo dentro del contenedor */
     top: 10px; /* Posicionado en la esquina superior derecha */
     right: 10px;
-    z-index: 2; /* Sobre la imagen */
     width: 30px;
     height: 30px;
     border-radius: 50%;

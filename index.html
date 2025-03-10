@@ -6,7 +6,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="images/ico/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="images/ico/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/ico/favicon-16x16.png">
-    <link rel="manifest" href="images/ico/site.webmanifest">
+    <!-- <link rel="manifest" href="images/ico/site.webmanifest"> -->
     <link rel="stylesheet" href="styles.css">
     <title>Juego de Memoria</title>
 
@@ -20,9 +20,9 @@
     <div class="game-container">
         <h1>Juego de Memoria de Sprunki</h1>
         <div class="phase-selector">
-            <button class="phase-btn active" data-phase="1">Fase 1</button>
-            <button class="phase-btn" data-phase="2">Fase 2</button>
-            <button class="phase-btn" data-phase="3">Retake</button>
+            <button class="phase-btn active" data-phase="1" data-images="1-20">Fase 1</button>
+            <button class="phase-btn" data-phase="2" data-images="21-40">Fase 2</button>
+            <button class="phase-btn" data-phase="3" data-images="50">Retake</button>
         </div>
         <div class="image-selector" id="imageSelector"></div>
         <button id="startGame" disabled>Iniciar Juego</button>
@@ -32,7 +32,7 @@
             <span>Tiempo: <span id="timer">0:00</span></span>
         </div>
         
-        <div class="grid" id="gameGrid" style="display: none;"></div>
+        <div class="grid " id="gameGrid" style="display: none;"></div>
         
         <div class="game-buttons">
             <button id="restart" style="display: none;">Reiniciar</button>
@@ -47,6 +47,21 @@
             <button id="closeModal">Cerrar</button>
         </div>
     </div>
+
+    <template id="imageOptionTemplate">
+        <div class="image-option">
+            <img src="" alt="Opción de imagen" loading="lazy">
+        </div>
+    </template>
+
+    <template id="cardTemplate">
+        <div class="card-container">
+            <button class="card">
+                <img src="" alt="Imagen del juego" loading="lazy">
+            </button>
+            <button class="pause-button" style="display: none;">⏸️</button>
+        </div>
+    </template>
 
     <script src="app.js"></script>
 </body>

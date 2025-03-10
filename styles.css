@@ -8,6 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 20px;
+    touch-action: manipulation;
 }
 
 .phase-selector {
@@ -94,6 +95,8 @@ body {
 
 .card {
     width: 100%;
+    min-width: 60px; /* Tamaño mínimo para toque cómodo */
+    min-height: 60px;
     aspect-ratio: 1;
     background: #6200ea;
     border: none;
@@ -184,7 +187,7 @@ body {
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -211,14 +214,34 @@ button:hover {
     opacity: 0.9;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 500px) { /* Móviles */
     .grid {
-        grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr); /* 3 columnas en móviles pequeños */
+      gap: 6px;
+    }
+    .image-option img {
+      height: 60px;
     }
     .game-container {
-        width: 90%;
+      padding: 10px;
     }
-}
+    .phase-btn {
+      padding: 6px 15px; /* Botones más pequeños pero accesibles */
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 768px) { /* Tablets */
+    .grid {
+      grid-template-columns: repeat(4, 1fr); /* Mantener 4 columnas si cabe */
+      gap: 8px;
+    }
+    .image-option img {
+      height: 80px; /* Reducir tamaño de imágenes en selección */
+    }
+  }
+
+
 
 
 

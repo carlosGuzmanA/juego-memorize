@@ -254,6 +254,10 @@ document.addEventListener("DOMContentLoaded", () => {
       card.addEventListener("click", () => {
         handleCardClick(card);
       });
+      card.addEventListener("touchstart", (e) => {
+        e.preventDefault(); // Evitar el comportamiento predeterminado (como zoom)
+        handleCardClick(card);
+      }, { passive: false });
       elements.gameGrid.appendChild(clone);
     });
   }
@@ -387,35 +391,41 @@ document.addEventListener("DOMContentLoaded", () => {
       console.warn(`playMatchSound: No se pudo reproducir el sonido para ${imageNumber}`);
       return null;
     }
-
+  
     const cardContainer1 = firstCard.closest(".card-container");
     const pauseButton1 = cardContainer1.querySelector(".pause-button");
     const cardContainer2 = secondCard.closest(".card-container");
     const pauseButton2 = cardContainer2.querySelector(".pause-button");
-
+  
     if (pauseButton1 && pauseButton2) {
       pauseButton1.style.display = "block";
       pauseButton2.style.display = "block";
       pauseButton1.dataset.imageNumber = imageNumber;
       pauseButton2.dataset.imageNumber = imageNumber;
-
-      const handlePauseClick = (e) => {
+  
+      const handlePauseInteraction = (e) => {
         e.stopPropagation();
         e.preventDefault();
         const btn = e.target;
         const imgNum = btn.dataset.imageNumber;
         togglePauseSound(imgNum, btn);
       };
-
-      // Limpiar eventos previos para evitar múltiples listeners
-      pauseButton1.removeEventListener("click", handlePauseClick);
-      pauseButton2.removeEventListener("click", handlePauseClick);
-      pauseButton1.addEventListener("click", handlePauseClick);
-      pauseButton2.addEventListener("click", handlePauseClick);
+  
+      // Limpiar eventos previos
+      pauseButton1.removeEventListener("click", handlePauseInteraction);
+      pauseButton2.removeEventListener("click", handlePauseInteraction);
+      pauseButton1.removeEventListener("touchstart", handlePauseInteraction);
+      pauseButton2.removeEventListener("touchstart", handlePauseInteraction);
+  
+      // Agregar eventos de clic y toque
+      pauseButton1.addEventListener("click", handlePauseInteraction);
+      pauseButton2.addEventListener("click", handlePauseInteraction);
+      pauseButton1.addEventListener("touchstart", (e) => handlePauseInteraction(e), { passive: false });
+      pauseButton2.addEventListener("touchstart", (e) => handlePauseInteraction(e), { passive: false });
     } else {
       console.warn(`playMatchSound: Botones de pausa no encontrados para ${imageNumber}`);
     }
-
+  
     return audio;
   }
 
